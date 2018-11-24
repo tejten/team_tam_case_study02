@@ -11,23 +11,74 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+# MSDS 6306: Doing Data Science
+## Case Study 02
+#### 1. Load and clean the Data: 
+```{r}
+# Install and load the library readxl so you can load the dataset
+# install.packages("readxl")
+library(readxl)
+# read the dataset
+attrition_data <-read_excel("../data/CaseStudy2-data.xlsx")
+# describe the dataset
+str(attrition_data)
+# Clean the data
+# Over18 variable is "Y" for all the employees, there is no variability so we will remove it.
+# EmployeeCount is "1" for all the employees, there is no variability so we will remove it.
+# StandardHours is "80" for all the employees, there is no variability so we will remove it.
+# EmployeeNumber is an assigned number for each employee, this does not cause any variability so we will remove it.
+attrition_data$Over18 <- NULL
+attrition_data$EmployeeCount <- NULL
+attrition_data$StandardHours <- NULL
+attrition_data$EmployeeNumber<-NULL
+# Some of the variables are of integer data type, it makes more sense to convert them to factor data type.
+to_factor <- c("Education", "EnvironmentSatisfaction", "JobInvolvement", "JobLevel", "JobSatisfaction", "PerformanceRating", "RelationshipSatisfaction", "StockOptionLevel","TrainingTimesLastYear","WorkLifeBalance")
+attrition_data[, to_factor] <- lapply((attrition_data[, to_factor]), as.factor)
+```
+#### 2. EDA through Decision Tree Model:
+```{r}
+# Looking at the dataset there are many categorical variables, so we decided to use the R packages decision tree model (rpart and rpart.plot) for EDA. Reference: https://rpubs.com/minma/cart_with_rpart
+# install.packages("rpart")
+# install.packages("rpart.plot")
+library(rpart)
+library(rpart.plot)
+attrition_decision_tree <- rpart( Attrition~.,data=attrition_data,control=rpart.control(minsplit = 10))
+# Display the variable importance based on the decision tree model
+attrition_decision_tree$variable.importance
+# Display a plot diagram of the attrition decision tree
+rpart.plot(attrition_decision_tree)
+# Based on the decision tree output Overtime, MonthlyIncome, TotalWorkingYears, HourlyRate, JobRole and Age are the most important factors influencing the attrition rates.
+```
+#### 3. Visualize the data:
+```{r}
+# Display the attrition rate at the Company
+library(ggplot2)
+table(attrition_data$Attrition)
+# There are a total of 237 employees who have left the company
+ggplot(attrition_data, aes(x=Attrition, fill=Attrition)) + geom_bar()
+# The impact of Overtime 
+table(attrition_data$OverTime, attrition_data$Attrition)
+ggplot(attrition_data, aes(OverTime, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+# The impact of Monthly Income
+# https://rpubs.com/pierrelafortune/cutdocumentation
+summary(attrition_data$MonthlyIncome)
+attrition_monthlyincome <- cut(attrition_data$MonthlyIncome, 10, include.lowest = TRUE, labels=c(1,2,3,4,5,6,7,8,9,10))
+ggplot(attrition_data, aes(attrition_monthlyincome, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+# As salary increases the attrition is decreasing. Lower salary is contributing to attrition
+# Attrition based on the number of working years
+summary(attrition_data$TotalWorkingYears)
+attrition_totalworkingyears <- cut(attrition_data$TotalWorkingYears, 10, include.lowest = TRUE)
+ggplot(attrition_data, aes(attrition_totalworkingyears, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+# Attrition based on the Hourly rate
+summary(attrition_data$HourlyRate)
+attrition_hourlyrate<- cut(attrition_data$HourlyRate, 7, include.lowest = TRUE)
+ggplot(attrition_data, aes(attrition_hourlyrate, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+# Attrition based on the Job Role
+table(attrition_data$JobRole, attrition_data$Attrition)
+ggplot(attrition_data, aes(JobRole, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+# Attrition based on the Age
+summary(attrition_data$Age)
+attrition_age <- cut(attrition_data$Age, 8, include.lowest = TRUE)
+ggplot(attrition_data, aes(attrition_age, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
