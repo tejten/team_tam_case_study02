@@ -31,6 +31,9 @@ attrition_data$Over18 <- NULL
 attrition_data$EmployeeCount <- NULL
 attrition_data$StandardHours <- NULL
 attrition_data$EmployeeNumber<-NULL
+#Calculating the number of missing values for each variable
+NA_sum <- sort(sapply(attrition_data, function(x) sum(is.na(x))), decreasing = TRUE)
+print(NA_sum) 
 # Some of the variables are of integer data type, it makes more sense to convert them to factor data type.
 to_factor <- c("Education", "EnvironmentSatisfaction", "JobInvolvement", "JobLevel", "JobSatisfaction", "PerformanceRating", "RelationshipSatisfaction", "StockOptionLevel","TrainingTimesLastYear","WorkLifeBalance")
 attrition_data[, to_factor] <- lapply((attrition_data[, to_factor]), as.factor)
