@@ -75,10 +75,10 @@ attrition_hourlyrate<- cut(attrition_data$HourlyRate, 7, include.lowest = TRUE)
 ggplot(attrition_data, aes(attrition_hourlyrate, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
 # Attrition based on the Job Role
 table(attrition_data$JobRole, attrition_data$Attrition)
-ggplot(attrition_data, aes(JobRole, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+ggplot(attrition_data, aes(JobRole, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") + theme(axis.text.x = element_text(size = 9, angle = 45, hjust = 1))
 # Attrition based on the Age
 summary(attrition_data$Age)
 attrition_age <- cut(attrition_data$Age, 8, include.lowest = TRUE)
-ggplot(attrition_data, aes(attrition_age, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+ggplot(attrition_data, aes(attrition_age, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") + theme(axis.text.x = element_text(size = 9, angle = 45, hjust = 1))
 ```
 
