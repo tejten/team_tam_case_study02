@@ -31,6 +31,36 @@ attrition_data$Over18 <- NULL
 attrition_data$EmployeeCount <- NULL
 attrition_data$StandardHours <- NULL
 attrition_data$EmployeeNumber<-NULL
+
+#Calculating the number of missing values for each variable
+NA_sum <- sort(sapply(attrition_data, function(x) sum(is.na(x))), decreasing = TRUE)
+print(NA_sum) 
+# There are no missing values for each of the variables.
+
+# Identify the numeric variables in the dataset
+numeric <- sapply(attrition_data, is.numeric)
+print(numeric)
+
+# Separate the numeric variables into a separate dataset.
+numeric_dat <- attrition_data[,numeric==TRUE]
+
+#install.packages("fastDummies")
+library(fastDummies)
+
+# Generate a heatmap on the numeric data
+numeric_attr <- cbind(numeric_dat[1:1470,], attrition_data['Attrition'])
+numeric_attr_dummy <- fastDummies::dummy_cols(numeric_attr, select_columns = "Attrition")
+numeric_attr_dummy$Attrition <-NULL
+numeric_attr_dummy$Attrition_No <-NULL
+corr_df <- cor(numeric_attr_dummy)
+#install.packages("corrplot")
+library(corrplot)
+library(ggplot2)
+highcor <- as.matrix(sort(corr_df[ ,'Attrition_Yes'], decreasing = TRUE))
+corr.idx <- names(which(apply(highcor, 1, function(x) (x > 0.05 | x < -0.05))))
+corrplot(as.matrix(corr_df[corr.idx,corr.idx]), method='square', 
+         addCoef.col = 'black', tl.cex = .8,cl.cex = .8, number.cex=.6)
+# 
 # Some of the variables are of integer data type, it makes more sense to convert them to factor data type.
 to_factor <- c("Education", "EnvironmentSatisfaction", "JobInvolvement", "JobLevel", "JobSatisfaction", "PerformanceRating", "RelationshipSatisfaction", "StockOptionLevel","TrainingTimesLastYear","WorkLifeBalance")
 attrition_data[, to_factor] <- lapply((attrition_data[, to_factor]), as.factor)
