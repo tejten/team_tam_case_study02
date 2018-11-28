@@ -1,3 +1,171 @@
+
+---
+title: "Team_TAM_Case_Study02"
+authors: 
+- Andrew Heroy <aheroy@smu.edu>
+- Martin Garcia <marting@smu.edu>
+- Tej Tenmattam <ttenmattam@smu.edu>
+date: "11/19/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# MSDS 6306: Doing Data Science
+## Case Study 02
+#### 1. Load and clean the Data: 
+```{r}
+# Install and load the library readxl so you can load the dataset
+# install.packages("readxl")
+library(readxl)
+# read the dataset
+attrition_data <-read_excel("../data/CaseStudy2-data.xlsx")
+# describe the dataset
+str(attrition_data)
+# Clean the data
+# Over18 variable is "Y" for all the employees, there is no variability so we will remove it.
+# EmployeeCount is "1" for all the employees, there is no variability so we will remove it.
+# StandardHours is "80" for all the employees, there is no variability so we will remove it.
+# EmployeeNumber is an assigned number for each employee, this does not cause any variability so we will remove it.
+attrition_data$Over18 <- NULL
+attrition_data$EmployeeCount <- NULL
+attrition_data$StandardHours <- NULL
+attrition_data$EmployeeNumber<-NULL
+
+#Calculating the number of missing values for each variable
+NA_sum <- sort(sapply(attrition_data, function(x) sum(is.na(x))), decreasing = TRUE)
+print(NA_sum) 
+# There are no missing values for each of the variables.
+
+# Identify the numeric variables in the dataset
+numeric <- sapply(attrition_data, is.numeric)
+print(numeric)
+
+# Separate the numeric variables into a separate dataset.
+numeric_dat <- attrition_data[,numeric==TRUE]
+
+#install.packages("fastDummies")
+library(fastDummies)
+
+# Generate a heatmap on the numeric data
+numeric_attr <- cbind(numeric_dat[1:1470,], attrition_data['Attrition'])
+numeric_attr_dummy <- fastDummies::dummy_cols(numeric_attr, select_columns = "Attrition")
+numeric_attr_dummy$Attrition <-NULL
+numeric_attr_dummy$Attrition_No <-NULL
+corr_df <- cor(numeric_attr_dummy)
+#install.packages("corrplot")
+library(corrplot)
+library(ggplot2)
+highcor <- as.matrix(sort(corr_df[ ,'Attrition_Yes'], decreasing = TRUE))
+corr.idx <- names(which(apply(highcor, 1, function(x) (x > 0.05 | x < -0.05))))
+corrplot(as.matrix(corr_df[corr.idx,corr.idx]), method='square', 
+         addCoef.col = 'black', tl.cex = .8,cl.cex = .8, number.cex=.6)
+# 
+# Some of the variables are of integer data type, it makes more sense to convert them to factor data type.
+to_factor <- c("Education", "EnvironmentSatisfaction", "JobInvolvement", "JobLevel", "JobSatisfaction", "PerformanceRating", "RelationshipSatisfaction", "StockOptionLevel","TrainingTimesLastYear","WorkLifeBalance")
+attrition_data[, to_factor] <- lapply((attrition_data[, to_factor]), as.factor)
+```
+#### 2. EDA through Decision Tree Model:
+```{r}
+# Looking at the dataset there are many categorical variables, so we decided to use the R packages decision tree model (rpart and rpart.plot) for EDA. Reference: https://rpubs.com/minma/cart_with_rpart
+# install.packages("rpart")
+# install.packages("rpart.plot")
+library(rpart)
+library(rpart.plot)
+attrition_decision_tree <- rpart( Attrition~.,data=attrition_data,control=rpart.control(minsplit = 10))
+# Display the variable importance based on the decision tree model
+attrition_decision_tree$variable.importance
+# Display a plot diagram of the attrition decision tree
+rpart.plot(attrition_decision_tree)
+# Based on the decision tree output Overtime, MonthlyIncome, TotalWorkingYears, HourlyRate, JobRole and Age are the most important factors influencing the attrition rates.
+
+
+#install packages("dplyr")
+#install packages("scales")
+#install packages("reshape2")
+#install pacakges("tidyr")
+
+library(dplyr)
+library(scales)
+library(reshape2)
+library(tidyr)
+
+
+#We use boxplots to see any differences between the distribution of those with attrition and without. Conditions that we must be aware of that our distributions may be skewed as there were more examples with no attrition than with.
+
+#Barplot for attrition counts
+ggplot(data.frame(attrition_data), aes(x=Attrition)) +
+  geom_bar()
+
+
+##Boxplot for all factors that are numerical
+#Wrote several notes into anything with odd distributions - for PP
+
+attrition_data %>%
+  select(Attrition, Age, MonthlyIncome, TotalWorkingYears,        StockOptionLevel:YearsWithCurrManager,MonthlyIncome:NumCompaniesWorked,PercentSalaryHike:RelationshipSatisfaction,DailyRate, DistanceFromHome:Education, 
+  EnvironmentSatisfaction, HourlyRate:JobLevel, JobSatisfaction) %>%
+  gather(Measure, Value, -Attrition) %>%
+  ggplot(aes(x = factor(Attrition), y = Value, fill=Attrition)) +
+   stat_boxplot(geom ='errorbar') +
+  geom_boxplot() +
+  facet_wrap(~Measure, scales = "free_y")
+
+
+##For our 5 main factors / Overtime, MonthlyIncome, TotalWorkingYears, HourlyRate, JobRole and Age
+#Notable points of interest are our MonthlyIncome and TotalWorkingYears
+#MonthlyIncome - our average income of those with attrition have a smaller average income
+#             - the range of income for for our groups are substantially different, most with no attrition have income     higher than our median with attrition
+#TotalWorkingYears - The ranges are are different with most with attrition peaking at 20 years working
+
+#Safe to assume that these factors run parrallel to age as the totalworking years increases our age does too, we can also expect our wages to increase
+
+attrition_data %>%
+  select(Attrition, Age, MonthlyIncome, TotalWorkingYears, HourlyRate) %>%
+  gather(Measure, Value, -Attrition) %>%
+  ggplot(aes(x = factor(Attrition), y = Value, fill=Attrition)) +
+   stat_boxplot(geom ='errorbar') +
+  geom_boxplot() +
+  facet_wrap(~Measure, scales = "free_y")
+
+## Incorporate barchart as OT is categorical/dummy type variable
+
+## Correlation & scatterplots to come
+
+```
+#### 3. Visualize the data:
+```{r}
+# Display the attrition rate at the Company
+library(ggplot2)
+table(attrition_data$Attrition)
+# There are a total of 237 employees who have left the company
+ggplot(attrition_data, aes(x=Attrition, fill=Attrition)) + geom_bar()
+# The impact of Overtime 
+table(attrition_data$OverTime, attrition_data$Attrition)
+ggplot(attrition_data, aes(OverTime, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+# The impact of Monthly Income
+# https://rpubs.com/pierrelafortune/cutdocumentation
+summary(attrition_data$MonthlyIncome)
+attrition_monthlyincome <- cut(attrition_data$MonthlyIncome, 10, include.lowest = TRUE, labels=c(1,2,3,4,5,6,7,8,9,10))
+ggplot(attrition_data, aes(attrition_monthlyincome, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+# As salary increases the attrition is decreasing. Lower salary is contributing to attrition
+# Attrition based on the number of working years
+summary(attrition_data$TotalWorkingYears)
+attrition_totalworkingyears <- cut(attrition_data$TotalWorkingYears, 10, include.lowest = TRUE)
+ggplot(attrition_data, aes(attrition_totalworkingyears, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+# Attrition based on the Hourly rate
+summary(attrition_data$HourlyRate)
+attrition_hourlyrate<- cut(attrition_data$HourlyRate, 7, include.lowest = TRUE)
+ggplot(attrition_data, aes(attrition_hourlyrate, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+# Attrition based on the Job Role
+table(attrition_data$JobRole, attrition_data$Attrition)
+ggplot(attrition_data, aes(JobRole, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") + theme(axis.text.x = element_text(size = 9, angle = 45, hjust = 1))
+# Attrition based on the Age
+summary(attrition_data$Age)
+attrition_age <- cut(attrition_data$Age, 8, include.lowest = TRUE)
+ggplot(attrition_data, aes(attrition_age, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") + theme(axis.text.x = element_text(size = 9, angle = 45, hjust = 1))
+```
+
 ---
 title: "Team_TAM_Case_Study02"
 authors: 
