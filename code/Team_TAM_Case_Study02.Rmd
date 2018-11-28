@@ -81,12 +81,13 @@ rpart.plot(attrition_decision_tree)
 # Based on the decision tree output Overtime, MonthlyIncome, TotalWorkingYears, HourlyRate, JobRole and Age are the most important factors influencing the attrition rates.
 ```
 
+
+```{r}
 #install packages("dplyr")
 #install packages("scales")
 #install packages("reshape2")
 #install pacakges("tidyr")
 
-```{r}
 library(dplyr)
 library(scales)
 library(reshape2)
