@@ -94,10 +94,8 @@ library(reshape2)
 library(tidyr)
 ```
 
-
-#Barplot for attrition counts
-
 ```{r}
+#Barplot for attrition counts
 ggplot(data.frame(attrition_data), aes(x=Attrition)) +
   geom_bar()
 ```
@@ -105,7 +103,6 @@ ggplot(data.frame(attrition_data), aes(x=Attrition)) +
 
 
 ```{r}
-
 #We use boxplots to see any differences between the distribution of those with attrition and without. Conditions that we must be aware of that our distributions may be skewed as there were more examples with no attrition than with.
 
 ##Boxplot for all factors that are numerical
@@ -120,16 +117,13 @@ attrition_data %>%
   facet_wrap(~Measure, scales = "free_y")
 ```
 
-
 ```{r}
-
 ##For our 5 main factors / Overtime, MonthlyIncome, TotalWorkingYears, HourlyRate, JobRole and Age
 #Notable points of interest are our MonthlyIncome and TotalWorkingYears
 #MonthlyIncome - our average income of those with attrition have a smaller average income
 #             - the range of income for for our groups are substantially different, most with no attrition have income     higher than our median with attrition
 #TotalWorkingYears - The ranges are are different with most with attrition peaking at 20 years working
 #Safe to assume that these factors run parrallel to age as the totalworking years increases our age does too, we can also expect our wages to increase
-
 
 attrition_data %>%
   select(Attrition, Age, MonthlyIncome, TotalWorkingYears, HourlyRate) %>%
