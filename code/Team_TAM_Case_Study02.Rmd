@@ -80,8 +80,6 @@ attrition_decision_tree$variable.importance
 rpart.plot(attrition_decision_tree)
 # Based on the decision tree output Overtime, MonthlyIncome, TotalWorkingYears, HourlyRate, JobRole and Age are the most important factors influencing the attrition rates.
 ```
-
-
 ```{r}
 #install packages("dplyr")
 #install packages("scales")
@@ -93,15 +91,11 @@ library(scales)
 library(reshape2)
 library(tidyr)
 ```
-
 ```{r}
 #Barplot for attrition counts
 ggplot(data.frame(attrition_data), aes(x=Attrition)) +
   geom_bar()
 ```
-
-
-
 ```{r}
 #We use boxplots to see any differences between the distribution of those with attrition and without. Conditions that we must be aware of that our distributions may be skewed as there were more examples with no attrition than with.
 
@@ -116,7 +110,6 @@ attrition_data %>%
   geom_boxplot() +
   facet_wrap(~Measure, scales = "free_y")
 ```
-
 ```{r}
 ##For our 5 main factors / Overtime, MonthlyIncome, TotalWorkingYears, HourlyRate, JobRole and Age
 #Notable points of interest are our MonthlyIncome and TotalWorkingYears
@@ -133,7 +126,6 @@ attrition_data %>%
   geom_boxplot() +
   facet_wrap(~Measure, scales = "free_y")
 ```
-
 ## Incorporate barchart as OT is categorical/dummy type variable
 
 ## Correlation & scatterplots to come
