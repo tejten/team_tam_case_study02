@@ -128,7 +128,7 @@ attrition_data %>%
 ```
 ## Incorporate barchart as OT is categorical/dummy type variable
 
-## Correlation & scatterplots to come
+## Scatter Plot Matrix
 ```{r}
 pairs(~ Age+DailyRate+DistanceFromHome+HourlyRate+MonthlyIncome+MonthlyRate+NumCompaniesWorked+PercentSalaryHike+TotalWorkingYears+YearsAtCompany+YearsInCurrentRole+YearsSinceLastPromotion,data=numeric_attr, main="Scatterplot of Important variables", cex=0.01)
 
