@@ -84,12 +84,15 @@ rpart.plot(attrition_decision_tree)
 #install packages("dplyr")
 #install packages("scales")
 #install packages("reshape2")
-#install pacakges("tidyr")
+#install packages("tidyr")
+#install packages("gridExtra")
 
 library(dplyr)
 library(scales)
 library(reshape2)
 library(tidyr)
+library(gridExtra)
+
 ```
 ```{r}
 #Barplot for attrition counts
@@ -126,7 +129,61 @@ attrition_data %>%
   geom_boxplot() +
   facet_wrap(~Measure, scales = "free_y")
 ```
-## Incorporate barchart as OT is categorical/dummy type variable
+``{r}
+#Histogram per category, Attrition. This is measured for age against all numerical variables.
+
+require(gridExtra)
+a <- ggplot(attrition_data, aes(x=Age, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+b <- ggplot(attrition_data, aes(x=DailyRate, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+c <- ggplot(attrition_data, aes(x=DistanceFromHome, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+d <- ggplot(attrition_data, aes(x=Education, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+e <- ggplot(attrition_data, aes(x=EnvironmentSatisfaction, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+f <- ggplot(attrition_data, aes(x=HourlyRate, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+g <- ggplot(attrition_data, aes(x=JobInvolvement, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+h <- ggplot(attrition_data, aes(x=JobLevel, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+i <- ggplot(attrition_data, aes(x=JobSatisfaction, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+j <- ggplot(attrition_data, aes(x=MonthlyIncome, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+k <- ggplot(attrition_data, aes(x=MonthlyRate, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+l <- ggplot(attrition_data, aes(x=NumCompaniesWorked, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+m <- ggplot(attrition_data, aes(x=PercentSalaryHike, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+n <- ggplot(attrition_data, aes(x=PerformanceRating, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+o <- ggplot(attrition_data, aes(x=Education, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+p <- ggplot(attrition_data, aes(x=RelationshipSatisfaction, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+q <- ggplot(attrition_data, aes(x=StockOptionLevel, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+r <- ggplot(attrition_data, aes(x=TotalWorkingYears, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+s <- ggplot(attrition_data, aes(x=TrainingTimesLastYear, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+t <- ggplot(attrition_data, aes(x=WorkLifeBalance, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+u <- ggplot(attrition_data, aes(x=YearsAtCompany, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+v <- ggplot(attrition_data, aes(x=YearsInCurrentRole, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+w <- ggplot(attrition_data, aes(x=YearsSinceLastPromotion, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+y <- ggplot(attrition_data, aes(x=YearsWithCurrManager, fill=Attrition)) +
+    geom_histogram(binwidth=.5, alpha=.5, position="identity")   
+grid.arrange(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,y, ncol=4)   
+
+```
 
 ## Scatter Plot Matrix
 ```{r}
