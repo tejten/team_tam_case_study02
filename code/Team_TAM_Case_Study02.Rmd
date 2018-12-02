@@ -37,7 +37,9 @@ attrition_data$EmployeeNumber<-NULL
 NA_sum <- sort(sapply(attrition_data, function(x) sum(is.na(x))), decreasing = TRUE)
 print(NA_sum) 
 # There are no missing values for each of the variables.
-
+```
+#### 2. EDA through Correlation Matrix:
+```{r}
 # Identify the numeric variables in the dataset
 numeric <- sapply(attrition_data, is.numeric)
 print(numeric)
@@ -61,13 +63,21 @@ highcor <- as.matrix(sort(corr_df[ ,'Attrition_Yes'], decreasing = TRUE))
 corr.idx <- names(which(apply(highcor, 1, function(x) (x > 0.05 | x < -0.05))))
 corrplot(as.matrix(corr_df[corr.idx,corr.idx]), method='square', 
          addCoef.col = 'black', tl.cex = .8,cl.cex = .8, number.cex=.6)
-# 
+# Based on the correlation matrix: Total Working Years,Job Level,Years in Current Role,Monthly Income and Age are the variables that are highly correlated with attrition.
+```
+#### 3. EDA through Scatterplot Matrix:
+```{r}
+# Scatter Plot Matrix
+pairs(~ Age+DailyRate+DistanceFromHome+HourlyRate+MonthlyIncome+MonthlyRate+NumCompaniesWorked+PercentSalaryHike+TotalWorkingYears+YearsAtCompany+YearsInCurrentRole+YearsSinceLastPromotion,data=numeric_attr, main="Scatterplot of Important variables", cex=0.01)
+# 23 different variables makes it a bit crowded and hard to visualize, so we will proceed with other EDA tools.
+```
+
+#### 4. EDA through Decision Tree Model:
+```{r}
 # Some of the variables are of integer data type, it makes more sense to convert them to factor data type.
 to_factor <- c("Education", "EnvironmentSatisfaction", "JobInvolvement", "JobLevel", "JobSatisfaction", "PerformanceRating", "RelationshipSatisfaction", "StockOptionLevel","TrainingTimesLastYear","WorkLifeBalance")
 attrition_data[, to_factor] <- lapply((attrition_data[, to_factor]), as.factor)
-```
-#### 2. EDA through Decision Tree Model:
-```{r}
+
 # Looking at the dataset there are many categorical variables, so we decided to use the R packages decision tree model (rpart and rpart.plot) for EDA. Reference: https://rpubs.com/minma/cart_with_rpart
 # install.packages("rpart")
 # install.packages("rpart.plot")
@@ -78,8 +88,29 @@ attrition_decision_tree <- rpart( Attrition~.,data=attrition_data,control=rpart.
 attrition_decision_tree$variable.importance
 # Display a plot diagram of the attrition decision tree
 rpart.plot(attrition_decision_tree)
-# Based on the decision tree output Overtime, MonthlyIncome, TotalWorkingYears, HourlyRate, JobRole and Age are the most important factors influencing the attrition rates.
+# Based on the decision tree output: Overtime, MonthlyIncome, TotalWorkingYears, HourlyRate, JobRole are the most important factors influencing the attrition rates.
 ```
+#### 5. EDA through Stepwise Regression Model:
+```{r}
+# stepwise forward regression
+attrition_data_sw <- fastDummies::dummy_cols(attrition_data, select_columns = "Attrition")
+attrition_data_sw$Attrition <-NULL
+attrition_data_sw$Attrition_No <-NULL
+# install olsrr from CRAN
+#install.packages("olsrr")
+library('olsrr')
+model <- lm(Attrition_Yes ~ ., data = attrition_data_sw)
+# forward selection
+#ols_step_forward_p(model)
+# backward selection
+#ols_step_backward_p(model)
+# both
+ols_step_both_p(model)
+# Stepwise AIC Regression
+#ols_step_both_aic(model)
+# After doing our analysis through these multiple methods, we could see a pattern emerge. The top most influential variables are Over Time, Total Working Years, Monthly Income, Job Role and Age. We will explore these variables more through visualization.
+```
+#### 6. Visualize the data using Boxplots and Histograms:
 ```{r}
 #install packages("dplyr")
 #install packages("scales")
@@ -185,13 +216,7 @@ grid.arrange(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,y, ncol=4)
 
 ```
 
-## Scatter Plot Matrix
-```{r}
-pairs(~ Age+DailyRate+DistanceFromHome+HourlyRate+MonthlyIncome+MonthlyRate+NumCompaniesWorked+PercentSalaryHike+TotalWorkingYears+YearsAtCompany+YearsInCurrentRole+YearsSinceLastPromotion,data=numeric_attr, main="Scatterplot of Important variables", cex=0.01)
-
-```
-
-#### 3. Visualize the data:
+#### 7. Visualize the data for trends:
 ```{r}
 # Display the attrition rate at the Company
 library(ggplot2)
@@ -223,3 +248,5 @@ summary(attrition_data$Age)
 attrition_age <- cut(attrition_data$Age, 8, include.lowest = TRUE)
 ggplot(attrition_data, aes(attrition_age, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") + theme(axis.text.x = element_text(size = 9, angle = 45, hjust = 1))
 ```
+
+#### 8. Summary:
