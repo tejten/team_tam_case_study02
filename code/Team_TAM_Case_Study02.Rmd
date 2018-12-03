@@ -168,53 +168,53 @@ attrition_data %>%
 
 require(gridExtra)
 a <- ggplot(attrition_data, aes(x=Age, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 b <- ggplot(attrition_data, aes(x=DailyRate, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 c <- ggplot(attrition_data, aes(x=DistanceFromHome, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 d <- ggplot(attrition_data, aes(x=Education, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 e <- ggplot(attrition_data, aes(x=EnvironmentSatisfaction, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 f <- ggplot(attrition_data, aes(x=HourlyRate, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 g <- ggplot(attrition_data, aes(x=JobInvolvement, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 h <- ggplot(attrition_data, aes(x=JobLevel, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 i <- ggplot(attrition_data, aes(x=JobSatisfaction, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 j <- ggplot(attrition_data, aes(x=MonthlyIncome, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 k <- ggplot(attrition_data, aes(x=MonthlyRate, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 l <- ggplot(attrition_data, aes(x=NumCompaniesWorked, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 m <- ggplot(attrition_data, aes(x=PercentSalaryHike, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 n <- ggplot(attrition_data, aes(x=PerformanceRating, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+    geom_bar(width = 0.5)
 o <- ggplot(attrition_data, aes(x=Education, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 p <- ggplot(attrition_data, aes(x=RelationshipSatisfaction, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 q <- ggplot(attrition_data, aes(x=StockOptionLevel, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 r <- ggplot(attrition_data, aes(x=TotalWorkingYears, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 s <- ggplot(attrition_data, aes(x=TrainingTimesLastYear, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 t <- ggplot(attrition_data, aes(x=WorkLifeBalance, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 u <- ggplot(attrition_data, aes(x=YearsAtCompany, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 v <- ggplot(attrition_data, aes(x=YearsInCurrentRole, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 w <- ggplot(attrition_data, aes(x=YearsSinceLastPromotion, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")
+     geom_bar(width = 0.5)
 y <- ggplot(attrition_data, aes(x=YearsWithCurrManager, fill=Attrition)) +
-    geom_histogram(binwidth=.5, alpha=.5, position="identity")   
+     geom_bar(width = 0.5)    
     
     
 grid.arrange(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,y, ncol=4)   
@@ -227,10 +227,10 @@ grid.arrange(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,y, ncol=4)
 #Removing those with attrition value of yes, will dig deeper into those with attrition
 
 attrition_dataNo <- attrition_data[attrition_data$Attrition != "Yes",]
-ggplot(data = attrition_dataNo, aes(x = Age)) + geom_histogram(fill = 'skyblue2') 
-ggplot(data = attrition_dataNo, aes(x = Education)) +geom_bar(fill='palegreen3')+ geom_histogram(fill = 'palegreen3')
-ggplot(data = attrition_dataNo, aes(x = Gender)) + geom_histogram(fill = 'darkorange1')
-ggplot(data = attrition_dataNo, aes(x = MaritalStatus)) + geom_histogram(fill = 'mediumpurple2')
+ggplot(data = attrition_dataNo, aes(x = Age)) + geom_bar(fill = 'skyblue2') 
+ggplot(data = attrition_dataNo, aes(x = Education)) +geom_bar(fill='palegreen3')
+ggplot(data = attrition_dataNo, aes(x = Gender)) + geom_bar(fill = 'darkorange1')
+ggplot(data = attrition_dataNo, aes(x = MaritalStatus)) + geom_bar(fill = 'mediumpurple2')
 
 ggplot(data.frame(attrition_dataNo), aes(x=Gender, fill=Gender), ) +
   geom_bar(stat="count")
