@@ -220,10 +220,10 @@ ggplot(data = attrition_dataNo, aes(x = Education)) +geom_bar(fill='palegreen3')
 ggplot(data = attrition_dataNo, aes(x = Gender)) + geom_bar(fill = 'darkorange1')
 ggplot(data = attrition_dataNo, aes(x = MaritalStatus)) + geom_bar(fill = 'mediumpurple2')
 
-ggplot(data.frame(attrition_dataNo), aes(x=Gender, fill=Gender), ) +
+ggplot(data.frame(attrition_dataNo), aes(x=Gender, fill=Gender)) +
   geom_bar(stat="count")
 ggplot(data.frame(attrition_dataNo), aes(x=MaritalStatus,  fill=MaritalStatus)) +
-  geom_bar(stat="count",)
+  geom_bar(stat="count")
   
 ```
 
