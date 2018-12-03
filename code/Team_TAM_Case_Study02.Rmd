@@ -224,7 +224,7 @@ grid.arrange(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,y, ncol=4)
 
 
 ```{r}
-#Removing those with attrition value of yes, will dig deeper into those who stayed with the company.
+#Removing those with attrition value of yes, we will dig deeper into those who stayed with the company.
 
 attrition_dataNo <- attrition_data[attrition_data$Attrition != "Yes",]
 ggplot(data = attrition_dataNo, aes(x = Age)) + geom_bar(fill = 'skyblue2') 
