@@ -224,7 +224,7 @@ grid.arrange(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,y, ncol=4)
 
 
 ```{r}
-#Removing those with attrition value of yes, will dig deeper into those with attrition
+#Removing those with attrition value of yes, we will dig deeper into those who stayed with the company.
 
 attrition_dataNo <- attrition_data[attrition_data$Attrition != "Yes",]
 ggplot(data = attrition_dataNo, aes(x = Age)) + geom_bar(fill = 'skyblue2') 
@@ -245,7 +245,7 @@ ggplot(data.frame(attrition_dataNo), aes(x=MaritalStatus,  fill=MaritalStatus)) 
 library(ggplot2)
 table(attrition_data$Attrition)
 # There are a total of 237 employees who have left the company
-ggplot(attrition_data, aes(x=Attrition, fill=Attrition)) + geom_bar()
+ggplot(attrition_data, aes(x=Attrition, fill=Attrition, xlab="Attrition")) + geom_bar()
 # The impact of Overtime 
 table(attrition_data$OverTime, attrition_data$Attrition)
 ggplot(attrition_data, aes(OverTime, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
@@ -253,26 +253,27 @@ ggplot(attrition_data, aes(OverTime, ..count.., fill = factor(Attrition))) + geo
 # https://rpubs.com/pierrelafortune/cutdocumentation
 summary(attrition_data$MonthlyIncome)
 attrition_monthlyincome <- cut(attrition_data$MonthlyIncome, 10, include.lowest = TRUE, labels=c(1,2,3,4,5,6,7,8,9,10))
-ggplot(attrition_data, aes(attrition_monthlyincome, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+ggplot(attrition_data, aes(attrition_monthlyincome, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") + labs(x="Montly Income")
 # As salary increases the attrition is decreasing. Lower salary is contributing to attrition
 # Attrition based on the number of working years
 summary(attrition_data$TotalWorkingYears)
 attrition_totalworkingyears <- cut(attrition_data$TotalWorkingYears, 10, include.lowest = TRUE)
-ggplot(attrition_data, aes(attrition_totalworkingyears, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+ggplot(attrition_data, aes(attrition_totalworkingyears, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") + labs(x="Total Working Years")
 # Attrition based on the Hourly rate
 summary(attrition_data$HourlyRate)
 attrition_hourlyrate<- cut(attrition_data$HourlyRate, 7, include.lowest = TRUE)
-ggplot(attrition_data, aes(attrition_hourlyrate, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge")
+ggplot(attrition_data, aes(attrition_hourlyrate, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") +labs(x="Hourly Rate")
 # Attrition based on the Job Role
 table(attrition_data$JobRole, attrition_data$Attrition)
-ggplot(attrition_data, aes(JobRole, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") + theme(axis.text.x = element_text(size = 9, angle = 45, hjust = 1))
+ggplot(attrition_data, aes(JobRole, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") + theme(axis.text.x = element_text(size = 9, angle = 45, hjust = 1)) + labs(x="Job Role")
 # Attrition based on the Age
 summary(attrition_data$Age)
 attrition_age <- cut(attrition_data$Age, 8, include.lowest = TRUE)
-ggplot(attrition_data, aes(attrition_age, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") + theme(axis.text.x = element_text(size = 9, angle = 45, hjust = 1))
+ggplot(attrition_data, aes(attrition_age, ..count.., fill = factor(Attrition))) + geom_bar(position="dodge") + theme(axis.text.x = element_text(size = 9, angle = 45, hjust = 1)) + labs(x="Age")
 ```
 
 #### 8. Summary:
-To determine the factors that influence employee retainment we analyized 35 factors using exploratory data analysis.
-This analysis included a decision tree model, correlation and scatterplot matices. Visual guides are provided through box plots and histograms. Through these visuals we were able to capture patterns and discovered the main factors affecting employee attrition include overtime, monthly income, total working years, job role and age. We recommend these 5 factors be improved through new processes to help with attrition.
+To determine the factors that influence employee retainment we analyzed 35 factors using exploratory data analysis.
+This analysis included a decision tree model, correlation and scatterplot matrices. Visual guides are provided through box plots and histograms. Through these visuals we were able to capture patterns and discovered the main factors affecting employee attrition include overtime, monthly income, total working years, job role and age. We recommend these 5 factors be improved through new processes to help with attrition.
+
 
