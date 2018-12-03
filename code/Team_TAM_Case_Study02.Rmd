@@ -118,6 +118,7 @@ ols_step_both_p(model)
 #install packages("tidyr")
 #install packages("gridExtra")
 
+library(ggplot2)
 library(dplyr)
 library(scales)
 library(reshape2)
@@ -160,8 +161,10 @@ attrition_data %>%
   geom_boxplot() +
   facet_wrap(~Measure, scales = "free_y")
 ```
-``{r}
+```{r}
+
 #Histogram per category, Attrition. This is measured for age against all numerical variables.
+
 
 require(gridExtra)
 a <- ggplot(attrition_data, aes(x=Age, fill=Attrition)) +
@@ -212,7 +215,10 @@ w <- ggplot(attrition_data, aes(x=YearsSinceLastPromotion, fill=Attrition)) +
     geom_histogram(binwidth=.5, alpha=.5, position="identity")
 y <- ggplot(attrition_data, aes(x=YearsWithCurrManager, fill=Attrition)) +
     geom_histogram(binwidth=.5, alpha=.5, position="identity")   
+    
+    
 grid.arrange(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,y, ncol=4)   
+
 
 ```
 
