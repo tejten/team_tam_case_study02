@@ -222,6 +222,23 @@ grid.arrange(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,y, ncol=4)
 
 ```
 
+
+```{r}
+#Removing those with attrition value of yes, will dig deeper into those with attrition
+
+attrition_dataNo <- attrition_data[attrition_data$Attrition != "Yes",]
+ggplot(data = attrition_dataNo, aes(x = Age)) + geom_histogram(fill = 'skyblue2') 
+ggplot(data = attrition_dataNo, aes(x = Education)) +geom_bar(fill='palegreen3')+ geom_histogram(fill = 'palegreen3')
+ggplot(data = attrition_dataNo, aes(x = Gender)) + geom_histogram(fill = 'darkorange1')
+ggplot(data = attrition_dataNo, aes(x = MaritalStatus)) + geom_histogram(fill = 'mediumpurple2')
+
+ggplot(data.frame(attrition_dataNo), aes(x=Gender, fill=Gender), ) +
+  geom_bar(stat="count")
+ggplot(data.frame(attrition_dataNo), aes(x=MaritalStatus,  fill=MaritalStatus)) +
+  geom_bar(stat="count",)
+  
+```
+
 #### 7. Visualize the data for trends:
 ```{r}
 # Display the attrition rate at the Company
