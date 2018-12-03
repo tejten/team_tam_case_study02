@@ -131,21 +131,9 @@ library(gridExtra)
 ggplot(data.frame(attrition_data), aes(x=Attrition)) +
   geom_bar()
 ```
+
 ```{r}
 #We use boxplots to see any differences between the distribution of those with attrition and without. Conditions that we must be aware of that our distributions may be skewed as there were more examples with no attrition than with.
-
-##Boxplot for all factors that are numerical
-
-attrition_data %>%
-  select(Attrition, Age, MonthlyIncome, TotalWorkingYears,        StockOptionLevel:YearsWithCurrManager,MonthlyIncome:NumCompaniesWorked,PercentSalaryHike:RelationshipSatisfaction,DailyRate, DistanceFromHome:Education, 
-  EnvironmentSatisfaction, HourlyRate:JobLevel, JobSatisfaction) %>%
-  gather(Measure, Value, -Attrition) %>%
-  ggplot(aes(x = factor(Attrition), y = Value, fill=Attrition)) +
-   stat_boxplot(geom ='errorbar') +
-  geom_boxplot() +
-  facet_wrap(~Measure, scales = "free_y")
-```
-```{r}
 ##For our 5 main factors / Overtime, MonthlyIncome, TotalWorkingYears, HourlyRate, JobRole and Age
 #Notable points of interest are our MonthlyIncome and TotalWorkingYears
 #MonthlyIncome - our average income of those with attrition have a smaller average income
