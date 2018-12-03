@@ -274,6 +274,6 @@ ggplot(attrition_data, aes(attrition_age, ..count.., fill = factor(Attrition))) 
 
 #### 8. Summary:
 To determine the factors that influence employee retainment we analyzed 35 factors using exploratory data analysis.
-This analysis included a decision tree model, correlation and scatterplot matices. Visual guides are provided through box plots and histograms. Through these visuals we were able to capture patterns and discovered the main factors affecting employee attrition include overtime, monthly income, total working years, job role and age. We recommend these 5 factors be improved through new processes to help with attrition.
+This analysis included a decision tree model, correlation and scatterplot matrices. Visual guides are provided through box plots and histograms. Through these visuals we were able to capture patterns and discovered the main factors affecting employee attrition include overtime, monthly income, total working years, job role and age. We recommend these 5 factors be improved through new processes to help with attrition.
 
 
